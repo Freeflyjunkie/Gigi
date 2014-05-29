@@ -1,0 +1,20 @@
+﻿@model Gigi.Domain.Garment
+@{
+    ViewBag.Title = "Home Page";
+}
+<div class="jumbotron">
+    <h1>Gigi</h1>
+</div>
+<table class="table table-condensed table-responsive table-responsive">
+    <tr>
+        <td>
+            @Model.Description
+        </td>
+        <td>
+            @foreach (var garmentToGarmentSize in Model.GarmentToGarmentSizes)
+            {
+                <div>@garmentToGarmentSize.GarmentSize.GarmentDescription</div>
+            }
+        </td>
+    </tr>
+</table>
