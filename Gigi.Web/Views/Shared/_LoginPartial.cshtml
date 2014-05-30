@@ -1,9 +1,18 @@
-﻿@if (Request.IsAuthenticated)
+﻿@using System.Security.Claims
+@if (Request.IsAuthenticated)
 {
     <text>
     <ul class="nav navbar-nav navbar-right">
-        <li class="navbar-text">
-            Hello, @User.Identity.Name!
+        <li class="navbar-text">            
+            @{
+                ClaimsPrincipal cp = ClaimsPrincipal.Current;
+                string fullname =
+                       string.Format("{0} {1}", cp.FindFirst(ClaimTypes.GivenName).Value,
+                       cp.FindFirst(ClaimTypes.Surname).Value);
+                var userName = string.Format("Hello {0}!",
+                                  fullname);
+                <span>@userName</span>
+            }            
         </li>
         <li>
             @Html.ActionLink("Sign out", "SignOut", "Account")

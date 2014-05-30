@@ -8,8 +8,7 @@ using Gigi.Business.Services.Interfaces;
 
 namespace Gigi.Web.Controllers
 {
-    [Authorize]
-    public class HomeController : Controller
+   public class HomeController : Controller
     {
         private readonly IGarmentService _garmentService;
 
@@ -25,13 +24,20 @@ namespace Gigi.Web.Controllers
             return View(garment);
         }
 
+        [Authorize]
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ClaimsPrincipal cp = ClaimsPrincipal.Current;
+            string fullname =
+                   string.Format("{0} {1}", cp.FindFirst(ClaimTypes.GivenName).Value,
+                   cp.FindFirst(ClaimTypes.Surname).Value);
+            ViewBag.Message = string.Format("Dear {0}, Welcome to the Gigi.com",
+                              fullname);
 
             return View();
         }
 
+        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
