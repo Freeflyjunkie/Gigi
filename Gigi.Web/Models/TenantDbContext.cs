@@ -5,7 +5,8 @@ namespace Gigi.Web.Models
 {
     public class TenantDbContext : DbContext
     {
-        public TenantDbContext()            
+        public TenantDbContext()
+            : base("DefaultConnection")           
         {
         }
 

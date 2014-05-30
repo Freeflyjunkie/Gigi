@@ -12,7 +12,7 @@ namespace Gigi.Repo.EF
 {
     public class GigiContext : DbContext
     {
-        public GigiContext()            
+        public GigiContext() : base("DefaultConnection")           
         {
             Database.Log = sql => Debug.Write(sql);            
         }

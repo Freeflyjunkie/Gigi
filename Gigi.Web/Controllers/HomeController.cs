@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using Gigi.Business.Services.Interfaces;
@@ -20,6 +21,7 @@ namespace Gigi.Web.Controllers
         public ActionResult Index()
         {
             var garment = _garmentService.GetGarmentById(1);
+            var principal = ClaimsPrincipal.Current;
             return View(garment);
         }
 

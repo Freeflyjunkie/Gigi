@@ -26,6 +26,7 @@ namespace Gigi.Repo.Repos
                 .Where(g => g.GarmentId == garmentId)
                 .ToList()
                 .SingleOrDefault();
+            //return _gigiContext.Garments.ToList().FirstOrDefault();
         }
     }
 }
