@@ -14,21 +14,17 @@ namespace Gigi.Web.Utils
     {
         public static bool ContainsTenant(string tenantId)
         {
-            using (TenantDbContext context = new TenantDbContext())
+            using (var context = new TenantDbContext())
             {
-                return context.Tenants
-                    .Where(tenant => tenant.Id == tenantId)
-                    .Any();
+                return context.Tenants.Any(tenant => tenant.Id == tenantId);
             }
         }
 
         public static bool ContainsKey(string thumbprint)
         {
-            using (TenantDbContext context = new TenantDbContext())
+            using (var context = new TenantDbContext())
             {
-                return context.IssuingAuthorityKeys
-                    .Where(key => key.Id == thumbprint)
-                    .Any();
+                return context.IssuingAuthorityKeys.Any(key => key.Id == thumbprint);
             }
         }
 
@@ -36,19 +32,11 @@ namespace Gigi.Web.Utils
         {
             IssuingAuthority issuingAuthority = ValidatingIssuerNameRegistry.GetIssuingAuthority(metadataLocation);
 
-            bool newKeys = false;
-            foreach (string thumbprint in issuingAuthority.Thumbprints)
-            {
-                if (!ContainsKey(thumbprint))
-                {
-                    newKeys = true;
-                    break;
-                }
-            }
+            bool newKeys = issuingAuthority.Thumbprints.Any(thumbprint => !ContainsKey(thumbprint));
 
             if (newKeys)
             {
-                using (TenantDbContext context = new TenantDbContext())
+                using (var context = new TenantDbContext())
                 {
                     context.IssuingAuthorityKeys.RemoveRange(context.IssuingAuthorityKeys);
                     foreach (string thumbprint in issuingAuthority.Thumbprints)
@@ -66,9 +54,9 @@ namespace Gigi.Web.Utils
 
         protected override bool IsThumbprintValid(string thumbprint, string issuer)
         {
-            string issuerID = issuer.TrimEnd('/').Split('/').Last();
+            var issuerId = issuer.TrimEnd('/').Split('/').Last();
 
-            return ContainsTenant(issuerID)
+            return ContainsTenant(issuerId)
                 && ContainsKey(thumbprint);
         }
     }
